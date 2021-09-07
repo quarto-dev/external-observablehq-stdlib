@@ -23,7 +23,7 @@ export default [
       })
     ],
     output: {
-      format: "umd",
+      format: "es",
       extend: true,
       name: "observablehq",
       file: "dist/stdlib.js"

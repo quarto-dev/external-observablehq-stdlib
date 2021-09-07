@@ -13,7 +13,7 @@
     "url": "https://github.com/observablehq/stdlib.git"
   },
   "scripts": {
-    "test": "tap 'test/**/*-test.js'",
+    "test": "tap 'test/**/*-test.js' --reporter classic",
     "prepublishOnly": "rollup -c",
     "postpublish": "git push && git push --tags"
   },
@@ -28,10 +28,10 @@
   ],
   "dependencies": {
     "d3-dsv": "^2.0.0",
-    "d3-require": "^1.2.4"
+    "d3-require": "file:../d3-require"
   },
   "devDependencies": {
-    "eslint": "^7.18.0",
+    "eslint": "^7.32.0",
     "husky": "^4.3.8",
     "node-fetch": "^2.6.1",
     "rollup": "^2.37.1",
