@@ -16,6 +16,7 @@ import tex from "./tex.js";
 import vegalite from "./vegalite.js";
 import width from "./width.js";
 import {arquero, arrow, d3, graphviz, htl, inputs, lodash, plot, topojson} from "./dependencies.js";
+import fromEntries from "./fromEntries.js";
 
 export default Object.assign(function Library(resolver) {
   const require = requirer(resolver);
@@ -54,7 +55,8 @@ export default Object.assign(function Library(resolver) {
 }, {resolve: requireDefault.resolve});
 
 function properties(values) {
-  return Object.fromEntries(Object.entries(values).map(property));
+  return fromEntries(Object.entries(values).map(property));
+  // return Object.fromEntries(Object.entries(values).map(property));
 }
 
 function property([key, value]) {

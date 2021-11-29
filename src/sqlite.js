@@ -1,5 +1,6 @@
 import {require as requireDefault} from "d3-require";
 import {sql} from "./dependencies";
+import fromEntries from "./fromEntries";
 
 export default async function sqlite(require) {
   const init = await require(sql.resolve());
@@ -52,7 +53,7 @@ async function exec(db, query, params) {
   const [result] = await db.exec(query, params);
   if (!result) return [];
   const {columns, values} = result;
-  const rows = values.map(row => Object.fromEntries(row.map((value, i) => [columns[i], value])));
+  const rows = values.map(row => fromEntries(row.map((value, i) => [columns[i], value])));
   rows.columns = columns;
   return rows;
 }
