@@ -1,3 +1,35 @@
+# Patching the @observablehq/stdlib for Quarto/RStudio IDE uses
+
+We track here a number of small changes requires to make the
+observable stdlib work in the RStudio IDE. The important bits are:
+
+- The build process (and as a result `dist/stdlib.js`) needs to use a [patched version of
+  `d3-require`](https://github.com/cscheid/d3-require) to support a
+  require() function that works from inside IPython's HTMLwidgets as
+  well as the observable runtime.
+  
+  - Currently, I do this manually by editing `package.json` to use a
+    version in the filesystem. This is hacky and we should make it
+    cleaner in the future.
+    
+- We can't call `Object.fromEntries` because the RStudio IDE uses an
+  old version of the JS stdlib.
+
+So, to build the `dist/stdlib.js` that is used in quarto, you'll need to:
+
+```
+$ mkdir some-dir
+$ cd some-dir
+$ git clone git@github.com:cscheid/d3-require.git
+$ git clone git@github.com:cscheid/stdlib.git
+$ cd stdlib
+$ npm install
+$ npm run prepublishOnly
+```
+
+The file will be in `dist`.
+
+
 # @observablehq/stdlib
 
 [![Node CI](https://github.com/observablehq/stdlib/workflows/Node%20CI/badge.svg)](https://github.com/observablehq/stdlib/actions?workflow=Node+CI)
