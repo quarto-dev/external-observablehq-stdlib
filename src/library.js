@@ -4,6 +4,7 @@ import Files from "./files/index.js";
 import {AbstractFile, NoFileAttachments} from "./fileAttachment.js";
 import Generators from "./generators/index.js";
 import html from "./html.js";
+import leaflet from "./leaflet.js";
 import md from "./md.js";
 import mermaid from "./mermaid.js";
 import Mutable from "./mutable.js";
@@ -24,6 +25,7 @@ export default Object.assign(function Library(resolver) {
     FileAttachment: () => NoFileAttachments,
     Arrow: () => require(arrow.resolve()),
     Inputs: () => require(inputs.resolve()).then(Inputs => ({...Inputs, file: Inputs.fileOf(AbstractFile)})),
+    L: () => leaflet(require),
     Mutable: () => Mutable,
     Plot: () => require(plot.resolve()),
     SQLite: () => SQLite(require),
