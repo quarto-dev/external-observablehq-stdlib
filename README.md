@@ -411,28 +411,36 @@ Returns a promise to the file loaded as a [SQLite database client](https://obser
 const db = await FileAttachment("chinook.db").sqlite();
 ```
 
+<a href="#attachment_xlsx" name="attachment_xlsx">#</a> *attachment*.<b>xlsx</b>() [<>](https://github.com/observablehq/stdlib/blob/master/src/xlsx.js "Source")
+
+Returns a promise to the file loaded as a [Workbook](https://observablehq.com/@observablehq/xlsx).
+
+```js
+const workbook = await FileAttachment("profit-and-loss.xlsx").xlsx();
+const sheet = workbook.sheet("Sheet1", {range: "B4:AF234", headers: true});
+```
+
+<a href="#attachment_xml" name="attachment_xml">#</a> *attachment*.<b>xml</b>() [<>](https://github.com/observablehq/stdlib/blob/master/src/fileAttachment.js "Source")
+
+Returns a promise to an [XMLDocument](https://developer.mozilla.org/en-US/docs/Web/API/XMLDocument) containing the contents of the file.
+
+```js
+const document = await FileAttachment("cars.xml").xml();
+```
+
+<a href="#attachment_html" name="attachment_html">#</a> *attachment*.<b>html</b>() [<>](https://github.com/observablehq/stdlib/blob/master/src/fileAttachment.js "Source")
+
+Returns a promise to an [HTMLDocument](https://developer.mozilla.org/en-US/docs/Web/API/HTMLDocument) containing the contents of the file.
+
+```js
+const document = await FileAttachment("index.html").html();
+```
+
 <a href="#FileAttachments" name="FileAttachments">#</a> <b>FileAttachments</b>(<i>resolve</i>) [<>](https://github.com/observablehq/stdlib/blob/master/src/fileAttachment.js "Source")
 
 *Note: this function is not part of the Observable standard library (in notebooks), but is provided by this module as a means for defining custom file attachment implementations when working directly with the Observable runtime.*
 
-Returns a [*FileAttachment*](#FileAttachment) function given the specified *resolve* function. The *resolve* function is an async function that takes a *name* and returns a URL at which the file of that name can be loaded. For example:
-
-```js
-const FileAttachment = FileAttachments((name) =>
-  `https://my.server/notebooks/demo/${name}`
-);
-```
-
-Or, with a more complex example, calling an API to produce temporary URLs:
-
-```js
-const FileAttachment = FileAttachments(async (name) =>
-  if (cachedUrls.has(name)) return cachedUrls.get(name);
-  const url = await fetchSignedFileUrl(notebookId, name);
-  cachedUrls.set(name, url);
-  return url;
-);
-```
+Returns a [*FileAttachment*](#FileAttachment) function given the specified *resolve* function. The *resolve* function is a function that takes a *name* and returns either an object {url, mimeType} representing the requested file if it exists, or null if the file does not exist. The url field (though not the object itself!) may be represented as a Promise if the URL is not yet known, such as for a file that is currently being uploaded. The mimeType must be a string, or undefined if the mime type is not known. For backwards compatibility, the *resolve* function may instead return just a URL, either a string or a promise.
 
 ### Generators
 

@@ -1,7 +1,8 @@
 import {autoType, csvParse, csvParseRows, tsvParse, tsvParseRows} from "d3-dsv";
 import {require as requireDefault} from "d3-require";
-import {arrow, jszip} from "./dependencies.js";
+import {arrow, jszip, exceljs} from "./dependencies.js";
 import {SQLiteDatabaseClient} from "./sqlite.js";
+import {Workbook} from "./xlsx.js";
 
 async function remote_fetch(file) {
   const response = await fetch(await file.url());
@@ -16,9 +17,10 @@ async function dsv(file, delimiter, {array = false, typed = false} = {}) {
       : (array ? csvParseRows : csvParse))(text, typed && autoType);
 }
 
-class AbstractFile {
-  constructor(name) {
+export class AbstractFile {
+  constructor(name, mimeType) {
     Object.defineProperty(this, "name", {value: name, enumerable: true});
+    if (mimeType !== undefined) Object.defineProperty(this, "mimeType", {value: mimeType + "", enumerable: true});
   }
   async blob() {
     return (await remote_fetch(this)).blob();
@@ -41,13 +43,14 @@ class AbstractFile {
   async tsv(options) {
     return dsv(this, "\t", options);
   }
-  async image() {
+  async image(props) {
     const url = await this.url();
     return new Promise((resolve, reject) => {
-      const i = new Image;
+      const i = new Image();
       if (new URL(url, document.baseURI).origin !== new URL(location).origin) {
         i.crossOrigin = "anonymous";
       }
+      Object.assign(i, props);
       i.onload = () => resolve(i);
       i.onerror = () => reject(new Error(`Unable to load file: ${this.name}`));
       i.src = url;
@@ -70,11 +73,15 @@ class AbstractFile {
   async html() {
     return this.xml("text/html");
   }
+  async xlsx() {
+    const [ExcelJS, buffer] = await Promise.all([requireDefault(exceljs.resolve()), this.arrayBuffer()]);
+    return new Workbook(await new ExcelJS.Workbook().xlsx.load(buffer));
+  }
 }
 
 class FileAttachment extends AbstractFile {
-  constructor(url, name) {
-    super(name);
+  constructor(url, name, mimeType) {
+    super(name, mimeType);
     Object.defineProperty(this, "_url", {value: url});
   }
   async url() {
@@ -89,9 +96,13 @@ export function NoFileAttachments(name) {
 export default function FileAttachments(resolve) {
   return Object.assign(
     name => {
-      const url = resolve(name += ""); // Returns a Promise, string, or null.
-      if (url == null) throw new Error(`File not found: ${name}`);
-      return new FileAttachment(url, name);
+      const result = resolve(name += "");
+      if (result == null) throw new Error(`File not found: ${name}`);
+      if (typeof result === "object" && "url" in result) {
+        const {url, mimeType} = result;
+        return new FileAttachment(url, name, mimeType);
+      }
+      return new FileAttachment(result, name);
     },
     {prototype: FileAttachment.prototype} // instanceof
   );

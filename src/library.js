@@ -1,10 +1,11 @@
 import {require as requireDefault} from "d3-require";
 import DOM from "./dom/index.js";
 import Files from "./files/index.js";
-import {NoFileAttachments} from "./fileAttachment.js";
+import {AbstractFile, NoFileAttachments} from "./fileAttachment.js";
 import Generators from "./generators/index.js";
 import html from "./html.js";
 import md from "./md.js";
+import mermaid from "./mermaid.js";
 import Mutable from "./mutable.js";
 import now from "./now.js";
 import Promises from "./promises/index.js";
@@ -23,7 +24,7 @@ export default Object.assign(function Library(resolver) {
   Object.defineProperties(this, properties({
     FileAttachment: () => NoFileAttachments,
     Arrow: () => require(arrow.resolve()),
-    Inputs: () => require(inputs.resolve()),
+    Inputs: () => require(inputs.resolve()).then(Inputs => ({...Inputs, file: Inputs.fileOf(AbstractFile)})),
     Mutable: () => Mutable,
     Plot: () => require(plot.resolve()),
     SQLite: () => SQLite(require),
@@ -35,6 +36,7 @@ export default Object.assign(function Library(resolver) {
     htl: () => require(htl.resolve()),
     html: () => html,
     md: () => md(require),
+    mermaid: () => mermaid(require),
     now,
     require: () => require,
     resolve: () => resolve,
