@@ -1,4 +1,4 @@
-import {require as requireDefault} from "d3-require";
+import {require as requireDefault} from "@quarto/external-d3-d3-require";
 import DOM from "./dom/index.js";
 import Files from "./files/index.js";
 import {AbstractFile, NoFileAttachments} from "./fileAttachment.js";
