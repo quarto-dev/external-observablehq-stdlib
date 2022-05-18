@@ -1,6 +1,6 @@
 {
   "name": "@quarto/external-observablehq-stdlib",
-  "version": "3.16.01",
+  "version": "3.16.02",
   "license": "ISC",
   "main": "dist/stdlib.js",
   "module": "src/index.js",
@@ -23,7 +23,7 @@
   ],
   "dependencies": {
     "d3-dsv": "^2.0.0",
-    "@quarto/external-d3-d3-require": "^1.2.4"
+    "@quarto/external-d3-d3-require": "^1.2.5"
   },
   "devDependencies": {
     "eslint": "^7.32.0",
