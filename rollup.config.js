@@ -1,4 +1,4 @@
-import node from "rollup-plugin-node-resolve";
+import node from "@rollup/plugin-node-resolve";
 import {terser} from "rollup-plugin-terser";
 import * as meta from "./package.json";
 
@@ -6,7 +6,7 @@ const copyright = `// @quarto/external-observablehq-stdlib ${meta.version} Fork 
 
 export default [
   {
-    input: "src/index.js",
+    input: "src/index.mjs",
     plugins: [
       node(),
       terser({

@@ -5,7 +5,7 @@ const extensionRe = /\.[^/]*$/;
 const mains = ["unpkg", "jsdelivr", "browser", "main"];
 
 (async () => {
-  console.log(`import dependency from "./dependency.js";`);
+  console.log(`import dependency from "./dependency.mjs";`);
   {
     const package = await resolve("d3");
     console.log(`export const d3 = dependency("${package.name}", "${package.version}", "${package.export}");`);
@@ -81,6 +81,10 @@ const mains = ["unpkg", "jsdelivr", "browser", "main"];
   {
     const package = await resolve("mermaid");
     console.log(`export const mermaid = dependency("${package.name}", "${package.version}", "${package.export.replace(/\.core\.js$/, ".min.js")}");`);
+  }
+  {
+    const package = await resolve("leaflet");
+    console.log(`export const leaflet = dependency("${package.name}", "${package.version}", "${package.export.replace(/-src\.js$/, ".js")}");`);
   }
 })();
 
