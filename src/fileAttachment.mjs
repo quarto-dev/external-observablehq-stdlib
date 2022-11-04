@@ -1,5 +1,8 @@
 import {autoType, csvParse, csvParseRows, tsvParse, tsvParseRows} from "d3-dsv";
+import {arrow, jszip, exceljs} from "./dependencies.mjs";
 import {requireDefault} from "./require.mjs";
+import {SQLiteDatabaseClient} from "./sqlite.mjs";
+import {Workbook} from "./xlsx.mjs";
 
 async function remote_fetch(file) {
   const response = await fetch(await file.url());
