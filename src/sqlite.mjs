@@ -1,6 +1,6 @@
 import {sql} from "./dependencies.mjs";
 import {requireDefault} from "./require.mjs";
-import fromEntries from "./fromEntries.js";
+import fromEntries from "./fromEntries.mjs";
 
 export default async function sqlite(require) {
   const [init, dist] = await Promise.all([require(sql.resolve()), require.resolve(sql.resolve("dist/"))]);
